@@ -461,31 +461,43 @@ myfunc1("inside js");
                         </small>
                     </section>
                     <section>
-                        <script>
-                            function wrap(object, method, wrapper) {
-                                var fn = object[method];
-                                return object[method] = function() {
-                                    return wrapper.apply(this, [fn].concat(
-                                            //return wrapper.apply(this, [fn.bind(this)].concat(
-                                            Array.prototype.slice.call(arguments)
-                                    ));
-                                };
-                            }
+                        <pre><code>
+function wrap(object, method, wrapper) {
+    var fn = object[method];
+    return object[method] = function() {
+        return wrapper.apply(this, [fn.bind(this)].concat(
+                Array.prototype.slice.call(arguments)
+        ));
+    };
+}
 
-                            Function.prototype.original = function(value) {
-                                this.value = value;
-                                console.log("value :" + this.value);
-                            }
+Function.prototype.original = function(value) {
+    this.value = value;
+    console.log("value :" + this.value);
+}
 
-                            var mywrap = wrap(Function.prototype, "original", function(orig_func, value) {
-                                orig_func(value);
-                                this.value = 20;
-                                console.log("wrapper value : " + this.value);
-                            });
+var mywrap = wrap(Function.prototype, "original",
+                function(orig_func, value) {
+                    orig_func(value);
+                    this.value = 20;
+                    console.log("wrapper value : " + this.value);
+                }
+             );
 
-                            mywrap("down")
-                        </script>
+mywrap("down")
+                        </code></pre>
+                        <small>
+                            간단히 알아두고 넘기자. 이전 함수를 사용자가 원하는함수로 덮어씌우기 위한 함수이다.<br>
+                            기존에 제공되는 함수에 사용자가 원하는 로직을 추가하고 싶거나.<br>
+                            기존에 있는 버그를 피해가고자 할 때 사용된다.<br>
+                        </small>
                     </section>
+                </section>
+                <section>
+                    <small>
+                        <h1> END </h1>
+                        <h2>Thanks!</h2>
+                    </small>
                 </section>
             </div>
         </div>
@@ -494,7 +506,6 @@ myfunc1("inside js");
         <script src="js/reveal.min.js"></script>
 
         <script>
-
             // Full list of configuration options available here:
             // https://github.com/hakimel/reveal.js#configuration
             Reveal.initialize({
