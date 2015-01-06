@@ -324,7 +324,7 @@ console.log(fibo(10));
                         <small>자바스크립트에서 함수형 프로그래밍을 활용한 주요함수.</small>
                     </section>
                     <section>
-                        <p>커링.</p>
+                        <h3>커링.</h3>
                         <small>
                             특정함수에서 정의된 인자의 일부를 넣어 고정시키고.<br>
                             나머지 인자를 받는 새로운 함수를 만드는것을 의미한다.
@@ -450,6 +450,41 @@ myfunc1("inside js");
                                 이와 같이 특정함수에 원하는객체를 바인딩시켜 새로운 함수를 사용할 때 bind()함수가 사용된다.
                             </small>
                         </p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h3>래퍼 (wrapper)</h3>
+                        <small>
+                            특정 함수를 자신의 함수로 덮어쓰는것을 말한다.<br>
+                            객체지향의 오버라이드 와 유사하다.
+                        </small>
+                    </section>
+                    <section>
+                        <script>
+                            function wrap(object, method, wrapper) {
+                                var fn = object[method];
+                                return object[method] = function() {
+                                    return wrapper.apply(this, [fn].concat(
+                                            //return wrapper.apply(this, [fn.bind(this)].concat(
+                                            Array.prototype.slice.call(arguments)
+                                    ));
+                                };
+                            }
+
+                            Function.prototype.original = function(value) {
+                                this.value = value;
+                                console.log("value :" + this.value);
+                            }
+
+                            var mywrap = wrap(Function.prototype, "original", function(orig_func, value) {
+                                orig_func(value);
+                                this.value = 20;
+                                console.log("wrapper value : " + this.value);
+                            });
+
+                            mywrap("down")
+                        </script>
                     </section>
                 </section>
             </div>
